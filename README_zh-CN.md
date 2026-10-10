@@ -6,9 +6,14 @@
 
 [English](./README.md) | [简体中文](./README_zh-CN.md)
 
-[GitHub](https://github.com/wangzian828/EVISCENE) · [Hugging Face](https://huggingface.co/ZiAnwang/EviScene)
+[项目网站](https://wangzian828.github.io/EVISCENE/) · [论文 PDF](https://wangzian828.github.io/EVISCENE/assets/eviscene-paper.pdf) · [GitHub](https://github.com/wangzian828/EVISCENE) · [Hugging Face](https://huggingface.co/ZiAnwang/EviScene)
 
 </div>
+
+ZiAn Wang*, Ruiqi Liu*, Zhengbo Zhang*, Yi Han, Jialiang Shen, Ruoxin Chen,
+Manni Cui, Ximo Zhu, Jin Jiang, Mingzhe Liu, Linhao Wang, Wenhao Wang†, Shu Wu†
+
+\* 共同第一作者 · † 共同通讯作者
 
 EviScene 核查图像所描绘的情境是否有事实证据支持，而不只是判断图像是否由 AI 生成。
 仅输入一张图像，Agent 就会识别需要核查的问题、检索外部证据，并给出 supported
@@ -32,7 +37,7 @@ supported/refuted 标签表示事实是否得到支持，不表示图像是否�
 
 | 划分 | 图片数量 | 元数据 |
 | --- | ---: | --- |
-| 训练集 | 8,490 | 图像路径、断言、事实性标签及来源/类别字段 |
+| 训练集 | 8,647 | 图像路径、断言、事实性标签及来源/类别字段 |
 | 测试集 | 1,527 | 图像路径、断言、事实性标签及来源/类别字段 |
 
 测试集仅用于评测，不用于训练或模型选择。这些图片与元数据划分不同于 SFT 教师轨迹
@@ -59,7 +64,12 @@ SESR（Strict Evidence Sufficiency Rate，严格证据充分率）要求最终�
 - [Hugging Face](https://huggingface.co/ZiAnwang/EviScene)：统一存放代码、SFT 与 PSD
   权重、EviLens 图片与元数据，以及论文。
 
-发布文件将在 arXiv 预印本上线后上传。
+论文 PDF 和项目网站现已开放。代码、模型权重和数据文件暂未公开。
+论文已提交 arXiv，获得公开编号后会补充链接。
+
+## 引用
+
+[下载 BibTeX](https://wangzian828.github.io/EVISCENE/assets/eviscene.bib)。
 
 ## 许可证
 

@@ -6,9 +6,14 @@
 
 [English](./README.md) | [简体中文](./README_zh-CN.md)
 
-[GitHub](https://github.com/wangzian828/EVISCENE) · [Hugging Face](https://huggingface.co/ZiAnwang/EviScene)
+[Website](https://wangzian828.github.io/EVISCENE/) · [Paper PDF](https://wangzian828.github.io/EVISCENE/assets/eviscene-paper.pdf) · [GitHub](https://github.com/wangzian828/EVISCENE) · [Hugging Face](https://huggingface.co/ZiAnwang/EviScene)
 
 </div>
+
+ZiAn Wang*, Ruiqi Liu*, Zhengbo Zhang*, Yi Han, Jialiang Shen, Ruoxin Chen,
+Manni Cui, Ximo Zhu, Jin Jiang, Mingzhe Liu, Linhao Wang, Wenhao Wang†, Shu Wu†
+
+\* Equal contribution · † Corresponding authors
 
 EviScene investigates whether the situation depicted in an image is supported
 by factual evidence—not simply whether the image was AI-generated. Given a
@@ -39,7 +44,7 @@ The dataset release consists of images and paired metadata:
 
 | Split | Images | Metadata |
 | --- | ---: | --- |
-| Train | 8,490 | Image path, claim, factuality label, and provenance/category fields |
+| Train | 8,647 | Image path, claim, factuality label, and provenance/category fields |
 | Test | 1,527 | Image path, claim, factuality label, and provenance/category fields |
 
 The test split is for evaluation, not training or model selection. These
@@ -69,7 +74,13 @@ sufficient evidence for the decisive image-grounded fact.
   repository for code, SFT and PSD checkpoints, EviLens images and metadata,
   and the paper.
 
-The release files will be uploaded after the arXiv preprint is available.
+The paper and project website are available now. Code, model checkpoints, and
+dataset files are not yet publicly released. The paper has been submitted to
+arXiv; its public identifier will be added when available.
+
+## Citation
+
+[Download BibTeX](https://wangzian828.github.io/EVISCENE/assets/eviscene.bib).
 
 ## License
 
