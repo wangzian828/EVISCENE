@@ -1,3 +1,14 @@
+const languageLinks = [...document.querySelectorAll('[data-language]')];
+function syncLanguageLinks() {
+  languageLinks.forEach((link) => {
+    const target = new URL(link.href);
+    target.hash = location.hash;
+    link.href = target.href;
+  });
+}
+syncLanguageLinks();
+window.addEventListener("hashchange", syncLanguageLinks);
+
 const tabs = [...document.querySelectorAll('[role="tab"]')];
 function selectTab(tab) {
   tabs.forEach((item) => {

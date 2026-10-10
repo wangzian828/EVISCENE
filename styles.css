@@ -1600,3 +1600,62 @@ tr.highlight th span {
   .affiliations { column-gap: 10px; }
   .footer-inner { flex-wrap: wrap; gap: 16px; }
 }
+.language-switch {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--soft);
+  white-space: nowrap;
+}
+.language-switch a {
+  padding: 6px 9px;
+  border-radius: 5px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.language-switch a[aria-current="page"] {
+  color: #fff;
+  background: var(--green);
+}
+.language-switch a:hover:not([aria-current="page"]) {
+  color: var(--green);
+  background: #e5edec;
+}
+html:lang(zh) {
+  --font: "DM Sans", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --heading: "Manrope", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+}
+html:lang(zh) h2,
+html:lang(zh) h3,
+html:lang(zh) .hero-subtitle {
+  letter-spacing: 0;
+  line-height: 1.45;
+}
+html:lang(zh) .eyebrow,
+html:lang(zh) .micro-label,
+html:lang(zh) .training-tag,
+html:lang(zh) .resource-type {
+  letter-spacing: 0.07em;
+}
+html:lang(zh) .hero-description,
+html:lang(zh) .section-head > p,
+html:lang(zh) .example-copy > p {
+  line-height: 1.85;
+}
+@media (max-width: 1100px) {
+  .nav-shell { gap: 16px; }
+  .nav-shell nav { gap: 16px; }
+  .nav-paper { display: none; }
+}
+@media (max-width: 650px) {
+  .nav-shell { justify-content: space-between; gap: 12px; }
+  .nav-shell nav { display: none; }
+  .language-switch { margin-left: auto; }
+  .language-switch a { padding: 6px 8px; font-size: 12px; }
+}

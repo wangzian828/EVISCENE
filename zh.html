@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>EviScene — 不止判断图像是否由 AI 生成</title>
+    <meta name="description" content="EviScene 通过视觉检查、信息检索与基于证据的推理，核查图像描绘的事实。了解图像事实性评估基准 EviLens。">
+    <meta name="theme-color" content="#0b7565">
+    <link rel="canonical" href="https://wangzian828.github.io/EVISCENE/zh.html">
+    <link rel="alternate" hreflang="en" href="https://wangzian828.github.io/EVISCENE/">
+    <link rel="alternate" hreflang="zh-CN" href="https://wangzian828.github.io/EVISCENE/zh.html">
+    <link rel="alternate" hreflang="x-default" href="https://wangzian828.github.io/EVISCENE/">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:locale:alternate" content="en_US">
+    <meta property="og:title" content="EviScene：不止判断图像是否由 AI 生成">
+    <meta property="og:description" content="基于智能体的图像事实性评估。了解论文、代码、模型与 EviLens 基准。">
+    <meta property="og:url" content="https://wangzian828.github.io/EVISCENE/zh.html">
+    <meta property="og:image" content="https://wangzian828.github.io/EVISCENE/assets/architecture.webp">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 48 48&#x27;%3E%3Crect width=&#x27;48&#x27; height=&#x27;48&#x27; rx=&#x27;12&#x27; fill=&#x27;%230b7565&#x27;/%3E%3Cpath d=&#x27;M12 21v-8h8M28 13h8v8M36 28v8h-8M20 36h-8v-8&#x27; fill=&#x27;none&#x27; stroke=&#x27;white&#x27; stroke-width=&#x27;3&#x27;/%3E%3Cpath d=&#x27;m18 24 5 5 9-10&#x27; fill=&#x27;none&#x27; stroke=&#x27;%23bce6c9&#x27; stroke-width=&#x27;3&#x27;/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=bilingual1">
+    <script src="site.js?v=bilingual1" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳转到正文</a>
+    <header class="site-header">
+      <div class="shell nav-shell">
+        <a class="brand" href="#top" aria-label="EviScene 首页"><svg viewbox="0 0 40 40" aria-hidden="true">
+            <path d="M5 15V6h10M25 6h10v9M35 25v9H25M15 34H5v-9"></path>
+            <path d="m12 21 6 6 12-14"></path></svg>EviScene<span>.</span></a>
+        <nav aria-label="主导航">
+          <a href="#method">方法</a><a href="#benchmark">EviLens</a><a href="#results">实验结果</a><a href="#examples">案例</a>
+        </nav>
+        <div class="language-switch" role="group" aria-label="语言切换">
+          <a href="./" lang="en" hreflang="en" data-language="en">English</a>
+          <a href="zh.html" lang="zh-CN" hreflang="zh-CN" data-language="zh-CN" aria-current="page">中文</a>
+        </div>
+        <a class="nav-paper" href="assets/eviscene-paper.pdf" target="_blank" rel="noopener">阅读论文</a>
+      </div>
+    </header>
+    <main id="main">
+      <section class="hero shell" id="top">
+        <div class="hero-copy">
+          <div class="eyebrow">以证据核查图像事实</div>
+          <h1>Evi<span>Scene</span></h1>
+          <p class="hero-subtitle">不止判断「是否由 AI 生成」</p>
+          <p class="hero-description">
+            看起来真实的图像，也可能描绘错误的事实。EviScene 主动寻找证据，核实图中内容。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="assets/eviscene-paper.pdf" target="_blank" rel="noopener"><svg viewbox="0 0 24 24" aria-hidden="true">
+                <path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6M9 16h6"></path></svg>论文</a>
+            <a class="button" href="https://github.com/wangzian828/EVISCENE" target="_blank" rel="noopener"><svg viewbox="0 0 24 24" aria-hidden="true">
+                <path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"></path></svg>代码</a>
+            <a class="text-link" href="https://huggingface.co/ZiAnwang/EviScene" target="_blank" rel="noopener">模型与数据 ↗</a>
+          </div>
+          <p class="hero-note">
+            基于智能体的图像事实性评估 · 2026
+          </p>
+        </div>
+        <article class="hero-case">
+          <div class="case-topline">
+            <span>论文中的一个案例</span><span>01 / 04</span>
+          </div>
+          <img class="hero-photo" src="assets/case-museum.jpg" width="812" height="458" alt="图像中，一座看似已竣工的现代博物馆正在举行开幕仪式">
+          <div class="hero-case-body">
+            <h2>博物馆开幕，还是事实矛盾？</h2>
+            <div class="evidence-pair">
+              <div>
+                <span class="micro-label">图像所呈现的</span>
+                <p>一座已竣工的博物馆，正在举行开幕仪式。</p>
+              </div>
+              <div>
+                <span class="micro-label">资料所记录的</span>
+                <p>
+                  在评估时，该博物馆仍处于建设阶段。
+                </p>
+              </div>
+            </div>
+            <div class="verdict-line">
+              <span class="verdict refuted">不支持</span><span>图像描绘的建设阶段与证据相矛盾。</span>
+            </div>
+          </div>
+        </article>
+      </section>
+      <section class="shell authors" aria-label="作者与单位">
+        <p class="author-names">
+          <span>ZiAn Wang<sup>1,*</sup></span>
+          <span>Ruiqi Liu<sup>2,*</sup></span>
+          <span>Zhengbo Zhang<sup>2,*</sup></span>
+          <span>Yi Han<sup>3</sup></span>
+          <span>Jialiang Shen<sup>4</sup></span>
+          <span>Ruoxin Chen<sup>5</sup></span>
+          <span>Manni Cui<sup>6</sup></span>
+          <span>Ximo Zhu<sup>2</sup></span>
+          <span>Jin Jiang<sup>7</sup></span>
+          <span>Mingzhe Liu<sup>8</sup></span>
+          <span>Linhao Wang<sup>1</sup></span>
+          <span>Wenhao Wang<sup>9,†</sup></span>
+          <span>Shu Wu<sup>2,†</sup></span>
+        </p>
+        <p class="affiliations">
+          <span><sup>1</sup>吉林大学</span>
+          <span><sup>2</sup>中国科学院自动化研究所</span>
+          <span><sup>3</sup>西南大学</span>
+          <span><sup>4</sup>悉尼大学</span>
+          <span><sup>5</sup>腾讯优图实验室</span>
+          <span><sup>6</sup>华中科技大学</span>
+          <span><sup>7</sup>阿联酋大学</span>
+          <span><sup>8</sup>深圳大学</span>
+          <span><sup>9</sup>Vast Intelligence Lab</span>
+        </p>
+        <p class="author-notes">* 共同第一作者 · † 共同通讯作者</p>
+      </section>
+      <div class="shell principles">
+        <div>
+          <span>01</span>
+          <p>
+            <strong>从图像出发</strong>无需用户额外提供文字断言。
+          </p>
+        </div>
+        <div>
+          <span>02</span>
+          <p>
+            <strong>主动核查事实</strong>将可见细节与外部证据联系起来。
+          </p>
+        </div>
+        <div>
+          <span>03</span>
+          <p>
+            <strong>给出有依据的判断</strong>通过训练学会核查的紧凑 9B 策略模型。
+          </p>
+        </div>
+      </div>
+
+      <section class="section shell" id="overview">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">我们关注的问题</p>
+            <h2>核查图像中的情境，<br>不只判断它的来源。</h2>
+          </div>
+          <p>
+            真实照片也可能产生误导，生成图像也可能描绘符合事实的场景。图像来源与内容事实性，是两个不同的问题。
+          </p>
+        </div>
+        <div class="task-flow">
+          <div class="task-step">
+            <span class="step-label">输入</span>
+            <h3>一张图像</h3>
+            <p>
+              识别其中可核查的人物、物体、事件、文字与背景。
+            </p>
+          </div>
+          <div class="task-step">
+            <span class="step-label">核查</span>
+            <h3>依靠证据，而非外观</h3>
+            <p>
+              寻找相关来源，并检查其中的细节是否与图像描绘的情境相符。
+            </p>
+          </div>
+          <div class="task-step task-outcome">
+            <span class="step-label">输出</span>
+            <h3>有证据支撑的评估</h3>
+            <p>
+              <span class="verdict supported">支持</span>
+              <span class="verdict refuted">不支持</span>
+            </p>
+            <p>同时给出与证据对应的解释。</p>
+          </div>
+        </div>
+        <details class="paper-detail">
+          <summary>查看论文中的任务定义</summary>
+          <button class="paper-figure" data-figure="assets/task.webp" data-pdf="assets/task.pdf" data-caption="图像事实性评估：任务定义">
+            <img loading="lazy" src="assets/task.webp" alt="论文中关于图像事实性评估任务定义的示意图"><span>查看大图</span>
+          </button>
+        </details>
+      </section>
+
+      <section class="tinted" id="method">
+        <div class="section shell">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">EviScene 智能体</p>
+              <h2>深入观察，<br>循证核查。</h2>
+            </div>
+            <p>
+              多模态 ReAct 策略自主选择检查哪些细节、去哪里搜索，以及何时已有足够证据得出结论。
+            </p>
+          </div>
+          <div class="method-grid">
+            <article>
+              <div class="method-number">01 <span>观察</span></div>
+              <h3>检查图像</h3>
+              <p>
+                理解场景及其细节，提取具体、可核查的线索，而不是仅凭视觉上的合理性作判断。
+              </p>
+              <div class="tool-label">
+                场景感知 · 局部检查
+              </div>
+            </article>
+            <article>
+              <div class="method-number">02 <span>检索</span></div>
+              <h3>查找相关背景</h3>
+              <p>
+                通过网页搜索与相关图像检索，识别对应的事件、实体和信息来源。
+              </p>
+              <div class="tool-label">网页搜索 · 图像检索</div>
+            </article>
+            <article>
+              <div class="method-number">03 <span>验证</span></div>
+              <h3>核对证据是否匹配</h3>
+              <p>
+                访问来源网页、比对参考图像，核对日期、身份及其他细节是否与输入图像一致。
+              </p>
+              <div class="tool-label">网页访问 · 参考图像比对</div>
+            </article>
+            <article>
+              <div class="method-number">04 <span>决策</span></div>
+              <h3>回看线索，形成结论</h3>
+              <p>
+                解决尚未确定的问题，再根据收集到的证据给出判断。
+              </p>
+              <div class="tool-label">
+                推理 · 基于证据的判断
+              </div>
+            </article>
+          </div>
+          <p class="loop-note">
+            <span aria-hidden="true">↺</span> 这是一个循环核查过程，而非固定清单。新证据出现后，策略可以重新审视已有观察。
+          </p>
+          <details class="paper-detail">
+            <summary>查看完整智能体架构</summary>
+            <button class="paper-figure" data-figure="assets/architecture.webp" data-pdf="assets/architecture.pdf" data-caption="EviScene：完整智能体架构">
+              <img loading="lazy" src="assets/architecture.webp" alt="论文中的 EviScene 完整智能体架构图"><span>查看大图</span>
+            </button>
+          </details>
+        </div>
+      </section>
+
+      <section class="section shell" id="benchmark">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">评测基准</p>
+            <h2>认识 EviLens。</h2>
+          </div>
+          <p>
+            EviLens 同时覆盖网页来源与受控构造的图像，用于评估内容的事实性，而不只是判断图像是否由 AI 生成。
+          </p>
+        </div>
+        <div class="dataset-stats">
+          <div><strong>10,174</strong><span>基准图像总数</span></div>
+          <div><strong>1,527</strong><span>测试图像</span></div>
+          <div><strong>12</strong><span>事实错误类型</span></div>
+          <div><strong>2</strong><span>数据获取来源</span></div>
+        </div>
+        <div class="taxonomy-grid">
+          <article>
+            <span class="taxonomy-index">A</span>
+            <h3>事件与关系</h3>
+            <p>发生了什么？涉及哪些主体？</p>
+            <ul>
+              <li>虚构行为</li>
+              <li>虚构互动</li>
+              <li>不可能的状态</li>
+              <li>虚假官方记录</li>
+            </ul>
+          </article>
+          <article>
+            <span class="taxonomy-index">B</span>
+            <h3>属性与细节</h3>
+            <p>可见细节是否经得起核查？</p>
+            <ul>
+              <li>数值篡改</li>
+              <li>身份替换</li>
+              <li>空间关系篡改</li>
+              <li>文字或标识篡改</li>
+            </ul>
+          </article>
+          <article>
+            <span class="taxonomy-index">C</span>
+            <h3>上下文</h3>
+            <p>时间、地点和来源是否正确？</p>
+            <ul>
+              <li>时间错置</li>
+              <li>事件语境错置</li>
+              <li>来源冒充</li>
+              <li>地理错置</li>
+            </ul>
+          </article>
+        </div>
+        <div class="dataset-note">
+          <span><strong>3,114</strong> 支持</span><span><strong>7,060</strong> 不支持</span>
+          <p>训练集 8,647 张 · 测试集 1,527 张，均含配套元数据。</p>
+        </div>
+        <details class="paper-detail">
+          <summary>查看 12 类事实错误的示例</summary>
+          <button class="paper-figure" data-figure="assets/taxonomy.webp" data-pdf="assets/taxonomy.pdf" data-caption="EviLens：事实错误分类">
+            <img loading="lazy" src="assets/taxonomy.webp" alt="12 类图像事实错误及其示例"><span>查看大图</span>
+          </button>
+        </details>
+        <details class="paper-detail">
+          <summary>查看数据集构建流程</summary>
+          <button class="paper-figure" data-figure="assets/dataset-pipeline.webp" data-caption="EviLens：数据集构建流程">
+            <img loading="lazy" src="assets/dataset-pipeline.webp" alt="EviLens 数据集构建流程图"><span>查看大图</span>
+          </button>
+        </details>
+      </section>
+
+      <section class="training-section" id="training">
+        <div class="section shell">
+          <p class="eyebrow">训练紧凑的核查模型</p>
+          <h2>学习核查流程，<br>改进关键决策。</h2>
+          <div class="training-grid">
+            <article>
+              <span class="training-tag">阶段 01 · SFT</span>
+              <h3>学会核查</h3>
+              <p>
+                通过监督微调，Qwen3.5-9B 策略模型学会调用工具、寻找证据并开展核查。
+              </p>
+            </article>
+            <article>
+              <span class="training-tag">阶段 02 · PSD</span>
+              <h3>从自身决策中学习</h3>
+              <p>
+                特权信息辅助的同策略自蒸馏，利用训练阶段的提示改进薄弱决策，同时保留成功行为。
+              </p>
+            </article>
+          </div>
+          <div class="training-foot">
+            <strong>测试时不提供特权提示。</strong>
+            <p>学生模型仅依据原始、不含提示的上下文行动。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section shell" id="results">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">主要实验结果</p>
+            <h2>紧凑的策略模型，<br>更充分的证据。</h2>
+          </div>
+          <p>
+            EviScene 同时关注分类表现与结论的证据支撑。以下数值均与当前论文版本一致。
+          </p>
+        </div>
+        <div class="result-highlights">
+          <div>
+            <strong>79.05<span>%</span></strong><span>平衡准确率</span>
+          </div>
+          <div>
+            <strong>52.26<span>%</span></strong><span>严格证据充分率</span>
+          </div>
+          <div>
+            <strong>+9.37<span> 个百分点</span></strong><span>相对 9B 基础智能体的 SESR 提升</span>
+          </div>
+        </div>
+        <div class="results-box">
+          <div class="tabs" role="tablist" aria-label="实验结果对比">
+            <button id="tab-policies" role="tab" aria-selected="true" aria-controls="panel-policies">
+              智能体策略</button><button id="tab-training" role="tab" aria-selected="false" aria-controls="panel-training" tabindex="-1">
+              训练阶段</button><button id="tab-tools" role="tab" aria-selected="false" aria-controls="panel-tools" tabindex="-1">
+              工具消融
+            </button>
+          </div>
+          <div id="panel-policies" role="tabpanel" aria-labelledby="tab-policies">
+            <div class="table-scroll" tabindex="0" aria-label="智能体策略结果，小屏幕可横向滚动">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">策略模型</th>
+                    <th scope="col">BAcc ↑</th>
+                    <th scope="col">宏平均 F1 ↑</th>
+                    <th scope="col">SESR ↑</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">GPT-5.5</th>
+                    <td>78.13</td>
+                    <td>72.06</td>
+                    <td>50.49</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Gemini 3.7 Flash</th>
+                    <td>81.57</td>
+                    <td>76.70</td>
+                    <td>42.89</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Gemini 3.1 Pro</th>
+                    <td>62.42</td>
+                    <td>64.17</td>
+                    <td>32.68</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Qwen3.5-397B</th>
+                    <td>71.72</td>
+                    <td>73.76</td>
+                    <td>43.29</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Qwen3.5-9B · 基础模型</th>
+                    <td>72.34</td>
+                    <td>74.57</td>
+                    <td>42.89</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Qwen3.5-9B · SFT</th>
+                    <td>78.81</td>
+                    <td>75.69</td>
+                    <td>50.49</td>
+                  </tr>
+                  <tr class="highlight">
+                    <th scope="row">EviScene · SFT + PSD <span>9B</span></th>
+                    <td>79.05</td>
+                    <td>74.67</td>
+                    <td><strong>52.26</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">
+              各行均采用智能体设置。在所列策略中，EviScene 的 SESR 最高。
+            </p>
+          </div>
+          <div id="panel-training" role="tabpanel" aria-labelledby="tab-training" hidden>
+            <div class="table-scroll" tabindex="0" aria-label="训练阶段结果，小屏幕可横向滚动">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Qwen3.5-9B 设置</th>
+                    <th scope="col">BAcc ↑</th>
+                    <th scope="col">宏平均 F1 ↑</th>
+                    <th scope="col">SESR ↑</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">直接预测</th>
+                    <td>65.70</td>
+                    <td>57.26</td>
+                    <td>1.70</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">基础智能体</th>
+                    <td>72.34</td>
+                    <td>74.57</td>
+                    <td>42.89</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">SFT 后</th>
+                    <td>78.81</td>
+                    <td>75.69</td>
+                    <td>50.49</td>
+                  </tr>
+                  <tr class="highlight">
+                    <th scope="row">SFT + PSD 后</th>
+                    <td>79.05</td>
+                    <td>74.67</td>
+                    <td><strong>52.26</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">
+              相较基础智能体，SFT + PSD 的 BAcc 提升 6.71 个百分点，SESR 提升 9.37 个百分点。
+            </p>
+          </div>
+          <div id="panel-tools" role="tabpanel" aria-labelledby="tab-tools" hidden>
+            <div class="table-scroll" tabindex="0" aria-label="工具消融结果，小屏幕可横向滚动">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">工具配置</th>
+                    <th scope="col">BAcc ↑</th>
+                    <th scope="col">SESR ↑</th>
+                    <th scope="col">Δ SESR</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="highlight">
+                    <th scope="row">全部工具 · EviScene</th>
+                    <td>79.05</td>
+                    <td><strong>52.26</strong></td>
+                    <td>—</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">去掉网页搜索</th>
+                    <td>74.37</td>
+                    <td>35.89</td>
+                    <td>−16.37</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">去掉图像检索</th>
+                    <td>74.52</td>
+                    <td>40.01</td>
+                    <td>−12.25</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">去掉证据检查</th>
+                    <td>76.55</td>
+                    <td>46.04</td>
+                    <td>−6.22</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">
+              证据检查包括来源网页访问与参考图像比对。去掉网页搜索后，SESR 的降幅最大。
+            </p>
+          </div>
+        </div>
+        <p class="metric-key">
+          <strong>BAcc</strong> 平衡准确率。 <strong>SESR</strong> 严格证据充分率：不仅要求判断正确，还要求满足证据质量标准。分数单位为百分比，差值单位为百分点。
+        </p>
+      </section>
+
+      <section class="tinted" id="examples">
+        <div class="section shell">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">看看如何核查</p>
+              <h2>关键细节，<br>改变最终判断。</h2>
+            </div>
+            <p>
+              以下为论文中的四个定性案例，展示可见线索、检索到的证据，以及最终判断的依据。
+            </p>
+          </div>
+          <div class="example-grid">
+            <article class="example-card">
+              <div class="example-image">
+                <img loading="lazy" src="assets/case-display.jpg" width="812" height="458" alt="标有 DisplayHDR True Black 1400 的显示认证图像"><span class="verdict supported">支持</span>
+              </div>
+              <div class="example-copy">
+                <span class="micro-label">01 · 技术规格</span>
+                <h3>陌生的标准，也可能真实存在。</h3>
+                <p>
+                  缺少背景信息时，“DisplayHDR True Black 1400”这一标识看起来可疑。核查找到了 VESA 于 2026 年 7 月介绍该认证等级的文档。
+                </p>
+                <div class="case-takeaway">
+                  <strong>决定性证据</strong>官方文档与图像中的认证名称一致。
+                </div>
+              </div>
+            </article>
+            <article class="example-card">
+              <div class="example-image">
+                <img loading="lazy" src="assets/case-exhibition.jpg" width="1800" height="1200" alt="显示 2025 至 2026 年日期的卡西尼展览海报"><span class="verdict refuted">不支持</span>
+              </div>
+              <div class="example-copy">
+                <span class="micro-label">02 · 时间背景</span>
+                <h3>展览确实存在，日期却不正确。</h3>
+                <p>
+                  海报标注的展期为 2025 年 10 月 14 日至 2026 年 2 月 1 日，而检索到的展期为 2026 年 10 月 14 日至 2027 年 2 月 1 日。
+                </p>
+                <div class="case-takeaway">
+                  <strong>决定性证据</strong>图像中的活动日期与资料相差一年。
+                </div>
+              </div>
+            </article>
+            <article class="example-card">
+              <div class="example-image">
+                <img loading="lazy" src="assets/case-museum.jpg" width="812" height="458" alt="一场看似为 berlin modern 举办的开幕仪式"><span class="verdict refuted">不支持</span>
+              </div>
+              <div class="example-copy">
+                <span class="micro-label">03 · 事件状态</span>
+                <h3>场景很逼真，事件阶段却不符。</h3>
+                <p>
+                  图像描绘了一座已竣工博物馆的开幕仪式，但项目记录显示，在论文评估时，berlin modern 仍处于建设阶段。
+                </p>
+                <div class="case-takeaway">
+                  <strong>决定性证据</strong>图像呈现的竣工状态与项目进展相矛盾。
+                </div>
+              </div>
+            </article>
+            <article class="example-card">
+              <div class="example-image">
+                <img loading="lazy" src="assets/case-cabaret.jpg" width="812" height="458" alt="在红磨坊举行的文化启动活动"><span class="verdict supported">支持</span>
+              </div>
+              <div class="example-copy">
+                <span class="micro-label">04 · 事件核查</span>
+                <h3>不常见的活动，也能找到确切来源。</h3>
+                <p>
+                  核查识别了场地与活动。法国文化部的资料确认，该启动活动于 2025 年 1 月 21 日在红磨坊举行。
+                </p>
+                <div class="case-takeaway">
+                  <strong>决定性证据</strong>官方来源将活动、场地与日期对应起来。
+                </div>
+              </div>
+            </article>
+          </div>
+          <details class="paper-detail">
+            <summary>
+              查看论文中的完整定性对比
+            </summary>
+            <button class="paper-figure" data-figure="assets/qualitative.webp" data-pdf="assets/qualitative.pdf" data-caption="定性对比：直接预测与 EviScene">
+              <img loading="lazy" src="assets/qualitative.webp" alt="论文中四个案例的直接预测与循证核查对比图"><span>查看大图</span>
+            </button>
+          </details>
+        </div>
+      </section>
+
+      <section class="section shell resources" id="resources">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">了解项目</p>
+            <h2>阅读、复现与探索。</h2>
+          </div>
+          <p>
+            从论文了解方法，查看代码实现，并通过统一的 Hugging Face 项目获取模型与 EviLens 资源。
+          </p>
+        </div>
+        <div class="resource-grid">
+          <article>
+            <span class="resource-type">01 / 论文</span>
+            <h3>完整研究内容</h3>
+            <p>涵盖方法、基准、实验及补充分析。论文 PDF 与原始图示保留英文。</p>
+            <a class="button primary" href="assets/eviscene-paper.pdf" target="_blank" rel="noopener">阅读 PDF</a>
+          </article>
+          <article>
+            <span class="resource-type">02 / 代码</span>
+            <h3>EviScene 实现</h3>
+            <p>智能体运行时、工具集成、SFT 与 PSD 训练及评测代码。</p>
+            <a class="button" href="https://github.com/wangzian828/EVISCENE" target="_blank" rel="noopener">GitHub 仓库</a>
+          </article>
+          <article>
+            <span class="resource-type">03 / 模型与数据</span>
+            <h3>一个项目，统一管理资源</h3>
+            <p>
+              统一管理 SFT 与原版 PSD 权重、EviLens 图像和元数据、代码及论文。具体开放情况以仓库说明为准。
+            </p>
+            <a class="button" href="https://huggingface.co/ZiAnwang/EviScene" target="_blank" rel="noopener">Hugging Face 项目</a>
+          </article>
+        </div>
+      </section>
+      <section class="section shell citation" id="citation">
+        <div class="section-head">
+          <div><p class="eyebrow">引用</p><h2>引用 EviScene。</h2></div>
+          <p><a class="text-link" href="assets/eviscene.bib" download>下载 BibTeX ↓</a></p>
+        </div>
+        <pre><code>@misc{wang2026eviscene,
+  title = {EviScene: Beyond "Is It AI?" for Agentic Image Factuality Assessment},
+  author = {ZiAn Wang and Ruiqi Liu and Zhengbo Zhang and Yi Han and
+            Jialiang Shen and Ruoxin Chen and Manni Cui and Ximo Zhu and
+            Jin Jiang and Mingzhe Liu and Linhao Wang and Wenhao Wang and Shu Wu},
+  year = {2026},
+  url = {https://wangzian828.github.io/EVISCENE/}
+}</code></pre>
+      </section>
+    </main>
+    <footer>
+      <div class="shell footer-inner">
+        <a class="footer-brand" href="#top">EviScene<span>.</span></a>
+        <p>
+          以证据核查图像事实。<br><span>EviScene · 2026</span>
+        </p>
+        <a href="assets/eviscene-paper.pdf" target="_blank" rel="noopener">论文</a>
+        <a href="https://github.com/wangzian828/EVISCENE" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://huggingface.co/ZiAnwang/EviScene" target="_blank" rel="noopener">Hugging Face</a>
+      </div>
+    </footer>
+    <dialog id="figure-dialog" aria-labelledby="figure-title">
+      <div class="figure-toolbar">
+        <h2 id="figure-title">论文图示</h2>
+        <div class="figure-controls" role="group" aria-label="图像缩放">
+          <button data-zoom="fit" aria-pressed="true">适应窗口</button><button data-zoom="1" aria-pressed="false">100%</button><button data-zoom="2" aria-pressed="false">200%</button><a class="figure-pdf" target="_blank" rel="noopener">PDF</a><button class="figure-close" aria-label="关闭图示">关闭</button>
+        </div>
+      </div>
+      <div class="zoom-stage" tabindex="0" aria-label="可滚动查看的放大图示">
+        <img alt="">
+      </div>
+      <p class="zoom-hint">
+        选择 100% 或 200% 查看细节，滚动浏览图像各部分。
+      </p>
+    </dialog>
+  </body>
+</html>
