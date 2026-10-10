@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="106" height="36" viewBox="0 0 106 36" role="img" aria-label="Read the paper on arXiv">
+  <title>Read the paper on arXiv</title>
+  <rect x=".5" y=".5" width="105" height="35" rx="7" fill="#A82431" stroke="#A82431"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 8.5h8l5 5v14H17zM25 8.5v5h5M20.5 18h6M20.5 22h6"/>
+  </g>
+  <text x="44" y="23" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600">arXiv</text>
+</svg>
+

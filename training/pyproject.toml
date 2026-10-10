@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eviscene-training"
+version = "0.1.0"
+description = "Qwen3.5 SFT and PSD training utilities for EviScene"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+dependencies = [
+    "eviscene>=0.1,<0.2",
+    "httpx>=0.25",
+    "Pillow>=10,<13",
+]
+
+[project.scripts]
+eviscene-train = "eviscene_training.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["eviscene_training*"]

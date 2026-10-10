@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="126" height="36" viewBox="0 0 126 36" role="img" aria-label="EviScene project website">
+  <title>EviScene project website</title>
+  <rect x=".5" y=".5" width="125" height="35" rx="7" fill="#0F766E" stroke="#0F766E"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="1.55" stroke-linecap="round">
+    <circle cx="23" cy="18" r="8.5"/>
+    <ellipse cx="23" cy="18" rx="3.5" ry="8.5"/>
+    <path d="M14.5 18h17M16 13.5h14M16 22.5h14"/>
+  </g>
+  <text x="44" y="23" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600">Website</text>
+</svg>
+

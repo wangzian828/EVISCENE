@@ -1,0 +1,12 @@
+EviScene
+Copyright 2026 EviScene contributors
+
+The code in this repository is licensed under Apache-2.0.
+Model weights, datasets, and the manuscript are separate artifacts; this
+license does not grant rights to them or to third-party services.
+
+The PSD implementation references Privileged Self-Distillation:
+https://www.canvas.inc/research/privileged-self-distillation
+https://github.com/essamsleiman/psd
+The reference implementation is not bundled. Python dependencies retain
+their respective licenses.

@@ -1,0 +1,68 @@
+cff-version: 1.2.0
+message: "If you use EviScene, please cite the paper below."
+type: software
+title: 'EviScene: Beyond “Is It AI?” for Agentic Image Factuality Assessment'
+version: 0.1.0
+license: Apache-2.0
+repository-code: 'https://github.com/wangzian828/EVISCENE'
+url: 'https://wangzian828.github.io/EVISCENE/'
+authors:
+  - family-names: Wang
+    given-names: ZiAn
+  - family-names: Liu
+    given-names: Ruiqi
+  - family-names: Zhang
+    given-names: Zhengbo
+  - family-names: Han
+    given-names: Yi
+  - family-names: Shen
+    given-names: Jialiang
+  - family-names: Chen
+    given-names: Ruoxin
+  - family-names: Cui
+    given-names: Manni
+  - family-names: Zhu
+    given-names: Ximo
+  - family-names: Jiang
+    given-names: Jin
+  - family-names: Liu
+    given-names: Mingzhe
+  - family-names: Wang
+    given-names: Linhao
+  - family-names: Wang
+    given-names: Wenhao
+  - family-names: Wu
+    given-names: Shu
+preferred-citation:
+  type: article
+  title: 'EviScene: Beyond "Is It AI?" for Agentic Image Factuality Assessment'
+  authors:
+    - family-names: Wang
+      given-names: ZiAn
+    - family-names: Liu
+      given-names: Ruiqi
+    - family-names: Zhang
+      given-names: Zhengbo
+    - family-names: Han
+      given-names: Yi
+    - family-names: Shen
+      given-names: Jialiang
+    - family-names: Chen
+      given-names: Ruoxin
+    - family-names: Cui
+      given-names: Manni
+    - family-names: Zhu
+      given-names: Ximo
+    - family-names: Jiang
+      given-names: Jin
+    - family-names: Liu
+      given-names: Mingzhe
+    - family-names: Wang
+      given-names: Linhao
+    - family-names: Wang
+      given-names: Wenhao
+    - family-names: Wu
+      given-names: Shu
+  year: 2026
+  journal: arXiv
+  url: 'https://arxiv.org/abs/2610.14609'

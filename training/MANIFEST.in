@@ -1,0 +1,12 @@
+prune tests
+prune operations
+prune outputs
+prune .cache
+prune cache
+prune logs
+prune runs
+prune datasets
+prune models
+prune weights
+prune private
+global-exclude *.py[cod] *.log .env .env.* *.pem *.key

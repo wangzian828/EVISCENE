@@ -1,0 +1,37 @@
+name: Code checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.11', '3.12']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -e ".[dev]" -e ./training
+      - run: ruff check .
+      - run: python scripts/check_release.py
+      - run: python -m build
+      - run: python -m build training
+      - run: python scripts/check_release.py --distributions
+      - name: Verify installed wheels outside checkout
+        shell: bash
+        run: |
+          python -m venv wheel-check
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            py="$PWD/wheel-check/Scripts/python.exe"
+          else
+            py="$PWD/wheel-check/bin/python"
+          fi
+          "$py" -m pip install dist/*.whl training/dist/*.whl
+          cd "$RUNNER_TEMP"
+          "$py" -c "import eviscene, eviscene_training; from eviscene.orchestrator.stage_runner import StageRunner, StageStep"
+          "$py" -m eviscene --help
+          "$py" -m eviscene_training.cli --help

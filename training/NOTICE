@@ -1,0 +1,7 @@
+EviScene training utilities
+Copyright 2026 EviScene contributors
+
+Licensed under Apache-2.0. Training data and model checkpoints are not
+included and have separate terms.
+The PSD method references https://github.com/essamsleiman/psd;
+its reference implementation is not bundled.
