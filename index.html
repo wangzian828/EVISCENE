@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>EviScene — Beyond “Is It AI?”</title>
+    <meta
+      name="description"
+      content="EviScene investigates the facts behind an image with visual inspection, retrieval, and evidence-grounded reasoning. Meet EviLens, a benchmark for image factuality assessment."
+    />
+    <meta name="theme-color" content="#0b7565" />
+    <link rel="canonical" href="https://wangzian828.github.io/EVISCENE/" />
+    <meta property="og:title" content="EviScene: Beyond “Is It AI?”" />
+    <meta property="og:description" content="Agentic image factuality assessment. Explore the paper, code, models, and EviLens benchmark." />
+    <meta property="og:url" content="https://wangzian828.github.io/EVISCENE/" />
+    <meta property="og:image" content="https://wangzian828.github.io/EVISCENE/assets/architecture.webp" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%230b7565'/%3E%3Cpath d='M12 21v-8h8M28 13h8v8M36 28v8h-8M20 36h-8v-8' fill='none' stroke='white' stroke-width='3'/%3E%3Cpath d='m18 24 5 5 9-10' fill='none' stroke='%23bce6c9' stroke-width='3'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="site.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="shell nav-shell">
+        <a class="brand" href="#top" aria-label="EviScene home"
+          ><svg viewBox="0 0 40 40" aria-hidden="true">
+            <path d="M5 15V6h10M25 6h10v9M35 25v9H25M15 34H5v-9" />
+            <path d="m12 21 6 6 12-14" /></svg
+          >EviScene<span>.</span></a
+        >
+        <nav aria-label="Main navigation">
+          <a href="#method">Method</a><a href="#benchmark">EviLens</a
+          ><a href="#results">Results</a><a href="#examples">Examples</a>
+        </nav>
+        <a
+          class="nav-paper"
+          href="assets/eviscene-paper.pdf"
+          target="_blank"
+          rel="noopener"
+          >Read the paper</a
+        >
+      </div>
+    </header>
+    <main id="main">
+      <section class="hero shell" id="top">
+        <div class="hero-copy">
+          <div class="eyebrow">IMAGE FACTUALITY, INVESTIGATED</div>
+          <h1>Evi<span>Scene</span></h1>
+          <p class="hero-subtitle">Beyond “Is It AI?”</p>
+          <p class="hero-description">
+            An image can look real and still get the facts wrong. EviScene
+            investigates what it depicts—and checks it against evidence.
+          </p>
+          <div class="hero-actions">
+            <a
+              class="button primary"
+              href="assets/eviscene-paper.pdf"
+              target="_blank"
+              rel="noopener"
+              ><svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6M9 16h6" /></svg
+              >Paper</a
+            >
+            <a
+              class="button"
+              href="https://github.com/wangzian828/EVISCENE"
+              target="_blank"
+              rel="noopener"
+              ><svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16" /></svg
+              >Code</a
+            >
+            <a class="text-link" href="https://huggingface.co/ZiAnwang/EviScene" target="_blank" rel="noopener">Models &amp; data ↗</a>
+          </div>
+          <p class="hero-note">
+            Agentic Image Factuality Assessment · 2026
+          </p>
+        </div>
+        <article class="hero-case">
+          <div class="case-topline">
+            <span>AN EXAMPLE FROM THE PAPER</span><span>01 / 04</span>
+          </div>
+          <img
+            class="hero-photo"
+            src="assets/case-museum.jpg"
+            width="812"
+            height="458"
+            alt="An apparent museum opening ceremony in front of a completed modern building"
+          />
+          <div class="hero-case-body">
+            <h2>A museum opening. Or a factual contradiction?</h2>
+            <div class="evidence-pair">
+              <div>
+                <span class="micro-label">IN THE IMAGE</span>
+                <p>A finished museum, hosting an opening ceremony.</p>
+              </div>
+              <div>
+                <span class="micro-label">IN THE RECORD</span>
+                <p>
+                  The museum was still under construction at assessment time.
+                </p>
+              </div>
+            </div>
+            <div class="verdict-line">
+              <span class="verdict refuted">Refuted</span
+              ><span>The depicted stage conflicts with the evidence.</span>
+            </div>
+          </div>
+        </article>
+      </section>
+      <section class="shell authors" aria-label="Authors and affiliations">
+        <p class="author-names">
+          <span>ZiAn Wang<sup>1,*</sup></span>
+          <span>Ruiqi Liu<sup>2,*</sup></span>
+          <span>Zhengbo Zhang<sup>2,*</sup></span>
+          <span>Yi Han<sup>3</sup></span>
+          <span>Jialiang Shen<sup>4</sup></span>
+          <span>Ruoxin Chen<sup>5</sup></span>
+          <span>Manni Cui<sup>6</sup></span>
+          <span>Ximo Zhu<sup>2</sup></span>
+          <span>Jin Jiang<sup>7</sup></span>
+          <span>Mingzhe Liu<sup>8</sup></span>
+          <span>Linhao Wang<sup>1</sup></span>
+          <span>Wenhao Wang<sup>9,†</sup></span>
+          <span>Shu Wu<sup>2,†</sup></span>
+        </p>
+        <p class="affiliations">
+          <span><sup>1</sup>Jilin University</span>
+          <span><sup>2</sup>Institute of Automation, Chinese Academy of Sciences</span>
+          <span><sup>3</sup>Southwest University</span>
+          <span><sup>4</sup>University of Sydney</span>
+          <span><sup>5</sup>Tencent Youtu Lab</span>
+          <span><sup>6</sup>Huazhong University of Science and Technology</span>
+          <span><sup>7</sup>United Arab Emirates University</span>
+          <span><sup>8</sup>Shenzhen University</span>
+          <span><sup>9</sup>Vast Intelligence Lab</span>
+        </p>
+        <p class="author-notes">* Equal contribution &nbsp; · &nbsp; † Corresponding authors</p>
+      </section>
+      <div class="shell principles">
+        <div>
+          <span>01</span>
+          <p>
+            <strong>Start with an image</strong>No user-provided textual claim
+            required.
+          </p>
+        </div>
+        <div>
+          <span>02</span>
+          <p>
+            <strong>Investigate the facts</strong>Connect visible details to
+            external evidence.
+          </p>
+        </div>
+        <div>
+          <span>03</span>
+          <p>
+            <strong>Explain the verdict</strong>A compact 9B policy, trained to
+            investigate.
+          </p>
+        </div>
+      </div>
+
+      <section class="section shell" id="overview">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">THE QUESTION</p>
+            <h2>Verify the situation.<br />Not just the image’s origin.</h2>
+          </div>
+          <p>
+            A genuine photograph can be misleading. A generated image can depict
+            a factually consistent scene. Origin and factuality are different
+            questions.
+          </p>
+        </div>
+        <div class="task-flow">
+          <div class="task-step">
+            <span class="step-label">INPUT</span>
+            <h3>An image</h3>
+            <p>
+              Identify the people, objects, events, text, and context that can
+              be checked.
+            </p>
+          </div>
+          <div class="task-step">
+            <span class="step-label">INVESTIGATION</span>
+            <h3>Evidence, not appearance</h3>
+            <p>
+              Find sources and inspect whether their details actually match the
+              depicted situation.
+            </p>
+          </div>
+          <div class="task-step task-outcome">
+            <span class="step-label">OUTPUT</span>
+            <h3>A grounded assessment</h3>
+            <p>
+              <span class="verdict supported">Supported</span>
+              <span class="verdict refuted">Refuted</span>
+            </p>
+            <p>With an explanation tied to the evidence.</p>
+          </div>
+        </div>
+        <details class="paper-detail">
+          <summary>View the task definition from the paper</summary>
+          <button
+            class="paper-figure"
+            data-figure="assets/task.webp"
+            data-pdf="assets/task.pdf"
+            data-caption="Image factuality assessment: task definition"
+          >
+            <img
+              loading="lazy"
+              src="assets/task.webp"
+              alt="Paper figure defining image factuality assessment"
+            /><span>Open full-size figure</span>
+          </button>
+        </details>
+      </section>
+
+      <section class="tinted" id="method">
+        <div class="section shell">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">THE EVISCENE AGENT</p>
+              <h2>Look closer.<br />Follow the evidence.</h2>
+            </div>
+            <p>
+              A multimodal ReAct policy chooses what to inspect, where to
+              search, and when the evidence is sufficient to conclude.
+            </p>
+          </div>
+          <div class="method-grid">
+            <article>
+              <div class="method-number">01 <span>OBSERVE</span></div>
+              <h3>Inspect the image</h3>
+              <p>
+                Read the scene and its details. Surface specific, checkable cues
+                rather than relying on visual plausibility.
+              </p>
+              <div class="tool-label">
+                Scene perception · Focused inspection
+              </div>
+            </article>
+            <article>
+              <div class="method-number">02 <span>RETRIEVE</span></div>
+              <h3>Find the context</h3>
+              <p>
+                Search the web and retrieve related images to identify relevant
+                events, entities, and sources.
+              </p>
+              <div class="tool-label">Web search · Image retrieval</div>
+            </article>
+            <article>
+              <div class="method-number">03 <span>VERIFY</span></div>
+              <h3>Check the match</h3>
+              <p>
+                Visit source pages and compare reference images. Test dates,
+                identities, and details against the input.
+              </p>
+              <div class="tool-label">Page visits · Reference comparison</div>
+            </article>
+            <article>
+              <div class="method-number">04 <span>DECIDE</span></div>
+              <h3>Revisit and conclude</h3>
+              <p>
+                Resolve open questions, then produce a verdict supported by the
+                collected evidence.
+              </p>
+              <div class="tool-label">
+                Reasoning · Evidence-grounded verdict
+              </div>
+            </article>
+          </div>
+          <p class="loop-note">
+            <span aria-hidden="true">↺</span> An investigation loop, not a fixed
+            checklist. The policy can revisit observations as new evidence
+            arrives.
+          </p>
+          <details class="paper-detail">
+            <summary>Explore the complete agent architecture</summary>
+            <button
+              class="paper-figure"
+              data-figure="assets/architecture.webp"
+              data-pdf="assets/architecture.pdf"
+              data-caption="EviScene: complete agent architecture"
+            >
+              <img
+                loading="lazy"
+                src="assets/architecture.webp"
+                alt="Complete EviScene agent architecture from the manuscript"
+              /><span>Open full-size figure</span>
+            </button>
+          </details>
+        </div>
+      </section>
+
+      <section class="section shell" id="benchmark">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">THE BENCHMARK</p>
+            <h2>Meet EviLens.</h2>
+          </div>
+          <p>
+            A benchmark designed to test factuality across both web-sourced and
+            controlled images—not just whether an image was generated.
+          </p>
+        </div>
+        <div class="dataset-stats">
+          <div><strong>10,174</strong><span>Images in the benchmark</span></div>
+          <div><strong>1,527</strong><span>Test images</span></div>
+          <div><strong>12</strong><span>Factual error types</span></div>
+          <div><strong>2</strong><span>Acquisition sources</span></div>
+        </div>
+        <div class="taxonomy-grid">
+          <article>
+            <span class="taxonomy-index">A</span>
+            <h3>Event &amp; relation</h3>
+            <p>What happened, and between whom?</p>
+            <ul>
+              <li>Invented action</li>
+              <li>Invented interaction</li>
+              <li>Impossible state</li>
+              <li>False official record</li>
+            </ul>
+          </article>
+          <article>
+            <span class="taxonomy-index">B</span>
+            <h3>Attribute &amp; detail</h3>
+            <p>Do the visible details hold up?</p>
+            <ul>
+              <li>Numerical alteration</li>
+              <li>Identity substitution</li>
+              <li>Spatial alteration</li>
+              <li>Text or mark alteration</li>
+            </ul>
+          </article>
+          <article>
+            <span class="taxonomy-index">C</span>
+            <h3>Context</h3>
+            <p>Is this the right time, place, and source?</p>
+            <ul>
+              <li>Temporal displacement</li>
+              <li>Event recontextualization</li>
+              <li>Source impersonation</li>
+              <li>Geographic displacement</li>
+            </ul>
+          </article>
+        </div>
+        <div class="dataset-note">
+          <span><strong>3,114</strong> supported</span
+          ><span><strong>7,060</strong> refuted</span>
+          <p>8,647 training images · 1,527 test images, with paired metadata.</p>
+        </div>
+        <details class="paper-detail">
+          <summary>See examples of the 12 factual error types</summary>
+          <button
+            class="paper-figure"
+            data-figure="assets/taxonomy.webp"
+            data-pdf="assets/taxonomy.pdf"
+            data-caption="EviLens: factual error taxonomy"
+          >
+            <img
+              loading="lazy"
+              src="assets/taxonomy.webp"
+              alt="Twelve image factuality error types with examples"
+            /><span>Open full-size figure</span>
+          </button>
+        </details>
+        <details class="paper-detail">
+          <summary>View the dataset construction pipeline</summary>
+          <button
+            class="paper-figure"
+            data-figure="assets/dataset-pipeline.webp"
+            data-caption="EviLens: dataset construction pipeline"
+          >
+            <img
+              loading="lazy"
+              src="assets/dataset-pipeline.webp"
+              alt="EviLens dataset construction pipeline"
+            /><span>Open full-size figure</span>
+          </button>
+        </details>
+      </section>
+
+      <section class="training-section" id="training">
+        <div class="section shell">
+          <p class="eyebrow">TRAINING A COMPACT INVESTIGATOR</p>
+          <h2>Learn the process.<br />Improve the decisions.</h2>
+          <div class="training-grid">
+            <article>
+              <span class="training-tag">STAGE 01 · SFT</span>
+              <h3>Learn to investigate</h3>
+              <p>
+                Supervised fine-tuning teaches a Qwen3.5-9B policy to carry out
+                evidence-seeking, tool-using investigations.
+              </p>
+            </article>
+            <article>
+              <span class="training-tag">STAGE 02 · PSD</span>
+              <h3>Learn from its own decisions</h3>
+              <p>
+                Privileged on-policy self-distillation targets weak decisions
+                with training-time hints, while preserving successful behavior.
+              </p>
+            </article>
+          </div>
+          <div class="training-foot">
+            <strong>No privileged hints at test time.</strong>
+            <p>The student acts from the original, unhinted context.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section shell" id="results">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">MAIN RESULTS</p>
+            <h2>A compact policy.<br />Stronger evidence.</h2>
+          </div>
+          <p>
+            EviScene combines classification quality with evidence-grounded
+            success. All values below follow the current manuscript snapshot.
+          </p>
+        </div>
+        <div class="result-highlights">
+          <div>
+            <strong>79.05<span>%</span></strong
+            ><span>Balanced accuracy</span>
+          </div>
+          <div>
+            <strong>52.26<span>%</span></strong
+            ><span>Strict evidence-supported success</span>
+          </div>
+          <div>
+            <strong>+9.37<span> pp</span></strong
+            ><span>SESR over the 9B base agent</span>
+          </div>
+        </div>
+        <div class="results-box">
+          <div class="tabs" role="tablist" aria-label="Result comparisons">
+            <button
+              id="tab-policies"
+              role="tab"
+              aria-selected="true"
+              aria-controls="panel-policies"
+            >
+              Agent policies</button
+            ><button
+              id="tab-training"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-training"
+              tabindex="-1"
+            >
+              Training stages</button
+            ><button
+              id="tab-tools"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-tools"
+              tabindex="-1"
+            >
+              Tool ablations
+            </button>
+          </div>
+          <div
+            id="panel-policies"
+            role="tabpanel"
+            aria-labelledby="tab-policies"
+          >
+            <div
+              class="table-scroll"
+              tabindex="0"
+              aria-label="Agent policy results, scroll horizontally on small screens"
+            >
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Policy</th>
+                    <th scope="col">BAcc ↑</th>
+                    <th scope="col">Macro F1 ↑</th>
+                    <th scope="col">SESR ↑</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">GPT-5.5</th>
+                    <td>78.13</td>
+                    <td>72.06</td>
+                    <td>50.49</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Gemini 3.7 Flash</th>
+                    <td>81.57</td>
+                    <td>76.70</td>
+                    <td>42.89</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Gemini 3.1 Pro</th>
+                    <td>62.42</td>
+                    <td>64.17</td>
+                    <td>32.68</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Qwen3.5-397B</th>
+                    <td>71.72</td>
+                    <td>73.76</td>
+                    <td>43.29</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Qwen3.5-9B · Base</th>
+                    <td>72.34</td>
+                    <td>74.57</td>
+                    <td>42.89</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Qwen3.5-9B · SFT</th>
+                    <td>78.81</td>
+                    <td>75.69</td>
+                    <td>50.49</td>
+                  </tr>
+                  <tr class="highlight">
+                    <th scope="row">EviScene · SFT + PSD <span>9B</span></th>
+                    <td>79.05</td>
+                    <td>74.67</td>
+                    <td><strong>52.26</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">
+              All rows use the agent setting. EviScene has the highest SESR
+              among these policies.
+            </p>
+          </div>
+          <div
+            id="panel-training"
+            role="tabpanel"
+            aria-labelledby="tab-training"
+            hidden
+          >
+            <div
+              class="table-scroll"
+              tabindex="0"
+              aria-label="Training stage results, scroll horizontally on small screens"
+            >
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Qwen3.5-9B setting</th>
+                    <th scope="col">BAcc ↑</th>
+                    <th scope="col">Macro F1 ↑</th>
+                    <th scope="col">SESR ↑</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Direct prediction</th>
+                    <td>65.70</td>
+                    <td>57.26</td>
+                    <td>1.70</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Base agent</th>
+                    <td>72.34</td>
+                    <td>74.57</td>
+                    <td>42.89</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">After SFT</th>
+                    <td>78.81</td>
+                    <td>75.69</td>
+                    <td>50.49</td>
+                  </tr>
+                  <tr class="highlight">
+                    <th scope="row">After SFT + PSD</th>
+                    <td>79.05</td>
+                    <td>74.67</td>
+                    <td><strong>52.26</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">
+              From the base agent to SFT + PSD: +6.71 points in BAcc and +9.37
+              points in SESR.
+            </p>
+          </div>
+          <div
+            id="panel-tools"
+            role="tabpanel"
+            aria-labelledby="tab-tools"
+            hidden
+          >
+            <div
+              class="table-scroll"
+              tabindex="0"
+              aria-label="Tool ablation results, scroll horizontally on small screens"
+            >
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Tool configuration</th>
+                    <th scope="col">BAcc ↑</th>
+                    <th scope="col">SESR ↑</th>
+                    <th scope="col">Δ SESR</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="highlight">
+                    <th scope="row">All tools · EviScene</th>
+                    <td>79.05</td>
+                    <td><strong>52.26</strong></td>
+                    <td>—</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Without web search</th>
+                    <td>74.37</td>
+                    <td>35.89</td>
+                    <td>−16.37</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Without image retrieval</th>
+                    <td>74.52</td>
+                    <td>40.01</td>
+                    <td>−12.25</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Without evidence inspection</th>
+                    <td>76.55</td>
+                    <td>46.04</td>
+                    <td>−6.22</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">
+              Evidence inspection comprises source-page visits and
+              reference-image comparison. Web search has the largest SESR drop
+              when removed.
+            </p>
+          </div>
+        </div>
+        <p class="metric-key">
+          <strong>BAcc</strong> Balanced accuracy. <strong>SESR</strong> Strict
+          evidence-supported success rate: a correct verdict must also meet the
+          evidence-quality criteria. Scores are percentages; differences are
+          percentage points.
+        </p>
+      </section>
+
+      <section class="tinted" id="examples">
+        <div class="section shell">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">SEE THE INVESTIGATION</p>
+              <h2>The detail changes<br />the verdict.</h2>
+            </div>
+            <p>
+              Four qualitative cases from the paper. Read the visible cue, the
+              retrieved evidence, and the reason for the final assessment.
+            </p>
+          </div>
+          <div class="example-grid">
+            <article class="example-card">
+              <div class="example-image">
+                <img
+                  loading="lazy"
+                  src="assets/case-display.jpg"
+                  width="812"
+                  height="458"
+                  alt="Display certification graphic labeled DisplayHDR True Black 1400"
+                /><span class="verdict supported">Supported</span>
+              </div>
+              <div class="example-copy">
+                <span class="micro-label">01 · TECHNICAL SPECIFICATION</span>
+                <h3>An unfamiliar standard can still be real.</h3>
+                <p>
+                  The “DisplayHDR True Black 1400” label looks questionable
+                  without context. The investigation finds VESA documentation
+                  introducing that certification tier in July 2026.
+                </p>
+                <div class="case-takeaway">
+                  <strong>Decisive evidence</strong>Official documentation
+                  matches the visible designation.
+                </div>
+              </div>
+            </article>
+            <article class="example-card">
+              <div class="example-image">
+                <img
+                  loading="lazy"
+                  src="assets/case-exhibition.jpg"
+                  width="1800"
+                  height="1200"
+                  alt="Cassini exhibition poster displaying dates in 2025 and 2026"
+                /><span class="verdict refuted">Refuted</span>
+              </div>
+              <div class="example-copy">
+                <span class="micro-label">02 · TEMPORAL CONTEXT</span>
+                <h3>The exhibition is real. The dates are not.</h3>
+                <p>
+                  The poster shows 14 October 2025–1 February 2026. The
+                  retrieved schedule instead gives 14 October 2026–1 February
+                  2027.
+                </p>
+                <div class="case-takeaway">
+                  <strong>Decisive evidence</strong>A one-year discrepancy in
+                  the event schedule.
+                </div>
+              </div>
+            </article>
+            <article class="example-card">
+              <div class="example-image">
+                <img
+                  loading="lazy"
+                  src="assets/case-museum.jpg"
+                  width="812"
+                  height="458"
+                  alt="An apparent opening ceremony for berlin modern"
+                /><span class="verdict refuted">Refuted</span>
+              </div>
+              <div class="example-copy">
+                <span class="micro-label">03 · EVENT STATE</span>
+                <h3>A convincing scene at the wrong stage.</h3>
+                <p>
+                  The image depicts an opening ceremony at a completed museum.
+                  Project records show berlin modern was still under
+                  construction at the paper’s assessment time.
+                </p>
+                <div class="case-takeaway">
+                  <strong>Decisive evidence</strong>The depicted completion
+                  conflicts with project status.
+                </div>
+              </div>
+            </article>
+            <article class="example-card">
+              <div class="example-image">
+                <img
+                  loading="lazy"
+                  src="assets/case-cabaret.jpg"
+                  width="812"
+                  height="458"
+                  alt="A cultural launch event at the Moulin Rouge"
+                /><span class="verdict supported">Supported</span>
+              </div>
+              <div class="example-copy">
+                <span class="micro-label">04 · EVENT VERIFICATION</span>
+                <h3>An unusual event, backed by a source.</h3>
+                <p>
+                  The investigation identifies the venue and event. France’s
+                  Ministry of Culture confirms the launch at the Moulin Rouge on
+                  21 January 2025.
+                </p>
+                <div class="case-takeaway">
+                  <strong>Decisive evidence</strong>An official source connects
+                  the event, venue, and date.
+                </div>
+              </div>
+            </article>
+          </div>
+          <details class="paper-detail">
+            <summary>
+              View the full qualitative comparison from the paper
+            </summary>
+            <button
+              class="paper-figure"
+              data-figure="assets/qualitative.webp"
+              data-pdf="assets/qualitative.pdf"
+              data-caption="Qualitative comparison: direct prediction and EviScene"
+            >
+              <img
+                loading="lazy"
+                src="assets/qualitative.webp"
+                alt="Paper comparison of direct prediction and evidence-seeking investigations across four cases"
+              /><span>Open full-size figure</span>
+            </button>
+          </details>
+        </div>
+      </section>
+
+      <section class="section shell resources" id="resources">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">EXPLORE THE PROJECT</p>
+            <h2>Read. Reproduce. Build.</h2>
+          </div>
+          <p>
+            Start with the paper, explore the implementation, and find the
+            checkpoints and EviLens in one Hugging Face project.
+          </p>
+        </div>
+        <div class="resource-grid">
+          <article>
+            <span class="resource-type">01 / PAPER</span>
+            <h3>The complete study</h3>
+            <p>Method, benchmark, experiments, and additional analyses.</p>
+            <a
+              class="button primary"
+              href="assets/eviscene-paper.pdf"
+              target="_blank"
+              rel="noopener"
+              >Read PDF</a
+            >
+          </article>
+          <article>
+            <span class="resource-type">02 / CODE</span>
+            <h3>EviScene implementation</h3>
+            <p>Agent runtime, tool integrations, SFT and PSD training, and evaluation.</p>
+            <a
+              class="button"
+              href="https://github.com/wangzian828/EVISCENE"
+              target="_blank"
+              rel="noopener"
+              >GitHub repository</a
+            >
+          </article>
+          <article>
+            <span class="resource-type">03 / MODELS &amp; DATA</span>
+            <h3>One project, all resources</h3>
+            <p>
+              SFT and original PSD checkpoints, EviLens images and metadata,
+              code, and the paper. See the repository for release availability.
+            </p>
+            <a class="button" href="https://huggingface.co/ZiAnwang/EviScene" target="_blank" rel="noopener">Hugging Face project</a>
+          </article>
+        </div>
+      </section>
+      <section class="section shell citation" id="citation">
+        <div class="section-head">
+          <div><p class="eyebrow">REFERENCE</p><h2>Cite EviScene.</h2></div>
+          <p><a class="text-link" href="assets/eviscene.bib" download>Download BibTeX ↓</a></p>
+        </div>
+        <pre><code>@misc{wang2026eviscene,
+  title = {EviScene: Beyond "Is It AI?" for Agentic Image Factuality Assessment},
+  author = {ZiAn Wang and Ruiqi Liu and Zhengbo Zhang and Yi Han and
+            Jialiang Shen and Ruoxin Chen and Manni Cui and Ximo Zhu and
+            Jin Jiang and Mingzhe Liu and Linhao Wang and Wenhao Wang and Shu Wu},
+  year = {2026},
+  url = {https://wangzian828.github.io/EVISCENE/}
+}</code></pre>
+      </section>
+    </main>
+    <footer>
+      <div class="shell footer-inner">
+        <a class="footer-brand" href="#top">EviScene<span>.</span></a>
+        <p>
+          Image factuality, investigated.<br /><span
+            >EviScene · 2026</span
+          >
+        </p>
+        <a href="assets/eviscene-paper.pdf" target="_blank" rel="noopener"
+          >Paper</a
+        >
+        <a href="https://github.com/wangzian828/EVISCENE" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://huggingface.co/ZiAnwang/EviScene" target="_blank" rel="noopener">Hugging Face</a>
+      </div>
+    </footer>
+    <dialog id="figure-dialog" aria-labelledby="figure-title">
+      <div class="figure-toolbar">
+        <h2 id="figure-title">Research figure</h2>
+        <div class="figure-controls" role="group" aria-label="Figure zoom">
+          <button data-zoom="fit" aria-pressed="true">Fit</button
+          ><button data-zoom="1" aria-pressed="false">100%</button
+          ><button data-zoom="2" aria-pressed="false">200%</button
+          ><a class="figure-pdf" target="_blank" rel="noopener">PDF</a
+          ><button class="figure-close" aria-label="Close figure">Close</button>
+        </div>
+      </div>
+      <div
+        class="zoom-stage"
+        tabindex="0"
+        aria-label="Scrollable enlarged figure"
+      >
+        <img alt="" />
+      </div>
+      <p class="zoom-hint">
+        Choose 100% or 200% to inspect details. Scroll to move around the
+        figure.
+      </p>
+    </dialog>
+  </body>
+</html>
