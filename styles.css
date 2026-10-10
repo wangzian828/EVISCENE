@@ -1648,6 +1648,9 @@ html:lang(zh) .section-head > p,
 html:lang(zh) .example-copy > p {
   line-height: 1.85;
 }
+html:lang(zh) .hero-subtitle {
+  text-wrap: balance;
+}
 @media (max-width: 1100px) {
   .nav-shell { gap: 16px; }
   .nav-shell nav { gap: 16px; }
