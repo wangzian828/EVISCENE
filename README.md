@@ -1,16 +1,16 @@
 <div align="center">
 
-<h1>EviScene</h1>
+# EviScene
 
 <strong>Beyond “Is It AI?” for Agentic Image Factuality Assessment</strong>
 
 <p>Inspect the image. Find the evidence. Verify the facts.</p>
 
 <p>
-  <a href="https://wangzian828.github.io/EVISCENE/"><img src="assets/badge-website.svg" alt="Project website" height="36"></a>
-  <a href="https://arxiv.org/abs/2610.14609"><img src="assets/badge-arxiv.svg" alt="Read the paper on arXiv" height="36"></a>
-  <a href="https://huggingface.co/papers/2610.14609"><img src="assets/badge-hf-paper.svg" alt="Paper page on Hugging Face" height="36"></a>
-  <a href="https://huggingface.co/ZiAnwang/EviScene"><img src="assets/badge-models-data.svg" alt="Models and data on Hugging Face" height="36"></a>
+  <a href="https://wangzian828.github.io/EVISCENE/" style="display: inline-block; margin: 2px 0;"><img src="assets/badge-website.svg" alt="Project website" height="36" style="display: inline-block; margin: 0; vertical-align: middle;"></a>
+  <a href="https://arxiv.org/abs/2610.14609" style="display: inline-block; margin: 2px 0;"><img src="assets/badge-arxiv.svg" alt="Read the paper on arXiv" height="36" style="display: inline-block; margin: 0; vertical-align: middle;"></a>
+  <a href="https://huggingface.co/papers/2610.14609" style="display: inline-block; margin: 2px 0;"><img src="assets/badge-hf-paper.svg" alt="Paper page on Hugging Face" height="36" style="display: inline-block; margin: 0; vertical-align: middle;"></a>
+  <a href="https://huggingface.co/ZiAnwang/EviScene" style="display: inline-block; margin: 2px 0;"><img src="assets/badge-models-data.svg" alt="Models and data on Hugging Face" height="36" style="display: inline-block; margin: 0; vertical-align: middle;"></a>
 </p>
 
 [English](./README.md) · [简体中文](./README_zh-CN.md)
