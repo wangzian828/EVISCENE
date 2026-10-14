@@ -1592,6 +1592,20 @@ tr.highlight th span {
   color: var(--muted);
   font-size: 12px;
 }
+.citation {
+  padding-top: 0;
+}
+.citation pre {
+  max-width: 100%;
+  padding: 24px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--soft);
+  font-size: 13px;
+  line-height: 1.7;
+  tab-size: 2;
+}
 @media (max-width: 600px) {
   .author-names { font-size: 14px; column-gap: 13px; }
   .affiliations { column-gap: 10px; }
